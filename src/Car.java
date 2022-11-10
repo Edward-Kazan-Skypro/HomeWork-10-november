@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Car extends Transport {
 
     private String bodyType = "default";
@@ -10,10 +13,30 @@ public class Car extends Transport {
     String winterTires = "winter tyres";
 
 
-    public Car(String brand, String model, String productionCountry, int productionYear, String bodyType, int numberOfSeats) {
-        super(brand, model, productionCountry, productionYear);
-        this.bodyType = bodyType;
-        this.numberOfSeats = numberOfSeats;
+    //Поля внутренних классов
+    Car.Key key;
+    Car.Insurance insurance;
+
+
+    public Car(String brand, String model, String productionCountry, int productionYear, String bodyType, int numberOfSeats, String fuelType) {
+        super(brand, model, productionCountry, productionYear, fuelType);
+        if (checkInputString(bodyType)) {
+            this.bodyType = bodyType;
+        }
+        if (numberOfSeats > 0) this.numberOfSeats = numberOfSeats;
+    }
+
+    public void refill() {
+        System.out.print("Автомобиль " + getBrand() + " " + getModel() + " заправлен ");
+        if (super.getFuelType().equals("бензин")) {
+            System.out.println("бензином.");
+        }
+        if (super.getFuelType().equals("дизель")) {
+            System.out.println("дизельным топливом.");
+        }
+        if (super.getFuelType().equals("электро")) {
+            System.out.println(" - батареи подзаряжены.");
+        }
     }
 
     public String getBodyType() {
@@ -29,7 +52,7 @@ public class Car extends Transport {
     }
 
     public void setNumberOfSeats(int numberOfSeats) {
-        this.numberOfSeats = numberOfSeats;
+        if (numberOfSeats > 0) this.numberOfSeats = numberOfSeats;
     }
 
     public double getEngineVolume() {
@@ -37,7 +60,7 @@ public class Car extends Transport {
     }
 
     public void setEngineVolume(double engineVolume) {
-        this.engineVolume = engineVolume;
+        if (engineVolume > 0) this.engineVolume = engineVolume;
     }
 
     public String getTransmission() {
@@ -45,7 +68,7 @@ public class Car extends Transport {
     }
 
     public void setTransmission(String transmission) {
-        this.transmission = transmission;
+        if (checkInputString(transmission)) this.transmission = transmission;
     }
 
     public String getRegNumber() {
@@ -53,7 +76,9 @@ public class Car extends Transport {
     }
 
     public void setRegNumber(String regNumber) {
-        this.regNumber = regNumber;
+        if (checkInputString(regNumber) & regNumber.length() == 9) {
+            this.regNumber = regNumber;
+        }
     }
 
     public String getWinterTires() {
@@ -61,6 +86,115 @@ public class Car extends Transport {
     }
 
     public void setWinterTires(String winterTires) {
-        this.winterTires = winterTires;
+        if (checkInputString(winterTires)) {
+            this.winterTires = winterTires;
+        }
     }
+
+    public void seasonalTireChange(String season) {
+        if (season.equals("winter") || season.equals("summer")) {
+            if (season.equalsIgnoreCase("winter")) {
+                setWinterTires("winter tyres");
+            }
+            if (season.equalsIgnoreCase("summer")) {
+                setWinterTires("summer tyres");
+            }
+        }
+    }
+
+    public Key getKey() {
+        return key;
+    }
+
+    public Insurance getInsurance() {
+        return insurance;
+    }
+
+    public void setKey(Car.Key inputKey) {
+        key = inputKey;
+    }
+
+    public void setInsurance(Car.Insurance inputInsurance) {
+        insurance = inputInsurance;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                ", объем двигателя - " + engineVolume + " л.,\n" +
+                "коробка передач: " + transmission +
+                ", тип кузова: " + bodyType + ",\n" +
+                "регистрационный номер: " + regNumber +
+                ", количество мест: " + numberOfSeats +
+                ", тип покрышек: " + winterTires + "\n" +
+                "удаленный запуск двигателя: " + key.getRemoteEngineStart() +
+                ", бесключевой доступ: " + key.getKeylessEntry() + "\n" +
+                "срок действия страховки до: " + insurance.getDuration() + " года" +
+                ", стоимость страховки: " + insurance.getCost() +
+                ", номер страхового полиса/договора: " + insurance.getNumber();
+    }
+
+    public class Key {
+        private String remoteEngineStart = "нет";
+        private String keylessEntry = "нет";
+
+        public String getRemoteEngineStart() {
+            return remoteEngineStart;
+        }
+
+        public String getKeylessEntry() {
+            return keylessEntry;
+        }
+
+        public Key(String remoteEngineStart, String keylessEntry) {
+            if (checkInputString(remoteEngineStart)) this.remoteEngineStart = remoteEngineStart;
+            if (checkInputString(keylessEntry)) this.keylessEntry = keylessEntry;
+        }
+    }
+
+    public class Insurance {
+
+        private String duration = "01.01.1990";
+        private double cost = 0;
+        private int number = 0;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        public Insurance(String duration, double cost, int number) {
+            if (cost > 0) this.cost = cost;
+            String numberAsString = String.valueOf(number);
+            if (numberAsString.length() == 9) {
+                this.number = number;
+            } else {
+                System.out.println("Неверно указан номер страховки!");
+                System.out.println("Номер страховки не изменен, осталось значение по умолчанию.");
+                System.out.println();
+            }
+            LocalDate dateFromInputDuration = LocalDate.parse(duration, formatter);
+            if (dateFromInputDuration.isAfter(LocalDate.now())) this.duration = duration;
+        }
+
+        public void checkDuration(Car car) {
+            LocalDate localDate = LocalDate.now();
+            LocalDate dateFromInsurance = LocalDate.parse(Car.Insurance.this.getDuration(), formatter);
+            if (dateFromInsurance.isBefore(localDate)) {
+                System.out.println("Срока действия страховки истек!");
+                System.out.println("Пожалуйста, продлите Вашу страховую защиту.");
+            }
+        }
+
+        public String getDuration() {
+            return duration;
+        }
+
+        public double getCost() {
+            return cost;
+        }
+
+        public int getNumber() {
+            return number;
+        }
+    }
+
+
 }
