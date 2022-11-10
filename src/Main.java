@@ -82,6 +82,5 @@ public class Main {
         //Заправка автобуса HYUNDAI
         hyundai.refill();
         System.out.println("----------------------------------------------------------------------");
-
     }
 }

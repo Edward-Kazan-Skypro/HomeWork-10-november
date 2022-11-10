@@ -195,6 +195,4 @@ public class Car extends Transport {
             return number;
         }
     }
-
-
 }

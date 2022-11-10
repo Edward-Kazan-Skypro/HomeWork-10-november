@@ -1,7 +1,6 @@
 import java.time.LocalDate;
 
 public abstract class Transport {
-
     private String brand = "default";
     private String model = "default";
     private String productionCountry = "default";
@@ -28,7 +27,6 @@ public abstract class Transport {
             if (fuelType.equalsIgnoreCase("бензин")){this.fuelType = "бензин";}
             if (fuelType.equalsIgnoreCase("дизель")){this.fuelType = "дизель";}
             if (fuelType.equalsIgnoreCase("электро")){this.fuelType = "электро";}
-
         }
     }
 
@@ -72,7 +70,6 @@ public abstract class Transport {
         } else {
             this.maxSpeed = 0;
         }
-
     }
 
     public boolean checkInputString(String string) {
@@ -88,6 +85,5 @@ public abstract class Transport {
                 ", сборка: " + productionCountry +
                 ", цвет: " + color +
                 ", тип топлива: " + fuelType;
-
     }
 }
