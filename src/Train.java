@@ -1,22 +1,28 @@
 public class Train extends Transport{
 
-    private double travelCost;
-    private double travelTime;
-    private String startStation;
-    private String finishStation;
-    private int numberOfWagons;
+    private int travelCost = 0;
+    private double travelTime = 0;
+    private String startStation = "не указана";
+    private String finishStation = "не указана";
+    private int numberOfWagons = 0;
 
-    public Train(String brand, String model, String productionCountry, int productionYear) {
-        super(brand, model, productionCountry, productionYear);
+    public Train(String brand, String model, String productionCountry, int productionYear, String fuelType) {
+        super(brand, model, productionCountry, productionYear, fuelType);
+    }
+
+    @Override
+    public void refill() {
+        System.out.print("Поезд " + getBrand() + " " + getModel() +
+                " заправлен дизельным топливом полностью.");
     }
 
 
-    public double getTravelCost() {
+    public int getTravelCost() {
         return travelCost;
     }
 
-    public void setTravelCost(double travelCost) {
-        this.travelCost = travelCost;
+    public void setTravelCost(int travelCost) {
+        if (travelCost > 0) this.travelCost = travelCost;
     }
 
     public double getTravelTime() {
@@ -24,7 +30,7 @@ public class Train extends Transport{
     }
 
     public void setTravelTime(double travelTime) {
-        this.travelTime = travelTime;
+        if (travelTime > 0) this.travelTime = travelTime;
     }
 
     public String getStartStation() {
@@ -32,7 +38,7 @@ public class Train extends Transport{
     }
 
     public void setStartStation(String startStation) {
-        this.startStation = startStation;
+        if (checkInputString(startStation)) this.startStation = startStation;
     }
 
     public String getFinishStation() {
@@ -40,7 +46,7 @@ public class Train extends Transport{
     }
 
     public void setFinishStation(String finishStation) {
-        this.finishStation = finishStation;
+        if (checkInputString(finishStation)) this.finishStation = finishStation;
     }
 
     public int getNumberOfWagons() {
@@ -48,7 +54,7 @@ public class Train extends Transport{
     }
 
     public void setNumberOfWagons(int numberOfWagons) {
-        this.numberOfWagons = numberOfWagons;
+        if (numberOfWagons > 0) this.numberOfWagons = numberOfWagons;
     }
 
     @Override
@@ -57,9 +63,9 @@ public class Train extends Transport{
                 ", модель " + super.getModel() +
                 ", год выпуска " + super.getProductionYear() +
                 ", страна производства " + super.getProductionCountry() +
-                ", скорость передвижения - " + super.getMaxSpeed() + "км/ч" +
-                ", маршрут движения - от " + startStation + " до " + finishStation + ".\n" +
+                ", скорость передвижения - " + super.getMaxSpeed() + " км/ч, " + "тип топлива: " + super.getFuelType() + ",\n" +
+                "маршрут движения - от " + startStation + " до " + finishStation + ".\n" +
                 "Цена поездки - " + travelCost + " рублей," +
-                "в поезде " + numberOfWagons + " вагонов.";
+                " в поезде " + numberOfWagons + " вагонов.";
     }
 }
