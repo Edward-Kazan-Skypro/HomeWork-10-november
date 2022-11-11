@@ -81,6 +81,14 @@ public class Main {
         higer.refill();
         //Заправка автобуса HYUNDAI
         hyundai.refill();
+        System.out.println();
+        System.out.println("----------------------------------------------------------------------");
+        //Проверим работу методов hashCode() и equals()
+        Bus bus_1 = new Bus("HYUNDAI", "A-555", "Китай", 2015, "дизель");
+        Bus bus_2 = new Bus("HYUNDAI", "A-555", "Китай", 2015, "дизель");
+        System.out.println("bus_1 equals bus_2 ? - " + bus_1.equals(bus_2));
+        System.out.println("bus_1.hashCode() = " + bus_1.hashCode());
+        System.out.println("bus_2.hashCode() = " + bus_2.hashCode());
         System.out.println("----------------------------------------------------------------------");
     }
 }

@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Car extends Transport {
 
@@ -119,6 +120,28 @@ public class Car extends Transport {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Car)) return false;
+        Car car = (Car) o;
+        return getNumberOfSeats() == car.getNumberOfSeats() &&
+                Double.compare(car.getEngineVolume(), getEngineVolume()) == 0 &&
+                getBodyType().equals(car.getBodyType()) &&
+                getTransmission().equals(car.getTransmission()) &&
+                getRegNumber().equals(car.getRegNumber()) &&
+                getWinterTires().equals(car.getWinterTires()) &&
+                getKey().equals(car.getKey()) &&
+                getInsurance().equals(car.getInsurance());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBodyType(), getNumberOfSeats(),
+                getEngineVolume(), getTransmission(), getRegNumber(),
+                getWinterTires(), getKey(), getInsurance());
+    }
+
+    @Override
     public String toString() {
         return super.toString() +
                 ", объем двигателя - " + engineVolume + " л.,\n" +
@@ -133,7 +156,6 @@ public class Car extends Transport {
                 ", стоимость страховки: " + insurance.getCost() +
                 ", номер страхового полиса/договора: " + insurance.getNumber();
     }
-
     public class Key {
         private String remoteEngineStart = "нет";
         private String keylessEntry = "нет";
